@@ -14,16 +14,16 @@
 #include <stdbool.h>
 
 /* Searches a string. If string is found returns the index, otherwise returns -1 */
-int JP_find_str(char text[], char key[]) {
+int JP_find_str(char buffer_json[], char key[]) {
     bool is_str_found = false;
     int first_index;
-    size_t i_text = 0;
+    size_t i_buffer = 0;
     size_t i_str = 0;
 
-    while (text[i_text] != '\0' && key[i_str] != '\0') {
-        if (text[i_text] == key[i_str]) {
+    while (buffer_json[i_buffer] != '\0' && key[i_str] != '\0') {
+        if (buffer_json[i_buffer] == key[i_str]) {
             if (i_str == 0) {
-                first_index = i_text;
+                first_index = i_buffer;
             }
             
             i_str++;
@@ -31,7 +31,7 @@ int JP_find_str(char text[], char key[]) {
             i_str = 0;
         }
 
-        i_text++;
+        i_buffer++;
 
         if ((i_str + 1) == strlen(key)) {
             is_str_found = true;
@@ -43,8 +43,8 @@ int JP_find_str(char text[], char key[]) {
     } else { return -1; }
 }
 
-char *JP_get_value(char text[], char key[]) {
-    int index_key = JP_find_str(text, key);
+char *JP_get_value(char buffer_json[], char key[]) {
+    int index_key = JP_find_str(buffer_json, key);
     int val_index_start;
     int val_index_end;
     int value_size;
@@ -54,77 +54,77 @@ char *JP_get_value(char text[], char key[]) {
         int i = index_key;
 
         /* Search the start index*/
-        while (text[i] != ':') {
+        while (buffer_json[i] != ':') {
             i++;
         }
 
-        if (text[i] == ':') { /* exclude spaces */
+        if (buffer_json[i] == ':') { /* exclude spaces */
             i++;
-            while (text[i] == ' ') {
+            while (buffer_json[i] == ' ') {
                 i++;
             }
             val_index_start = i;
         } else { return NULL; }
 
         /* Search the end index */
-        if (text[i] != '{' && text[i] != '[') {
-            while (text[i] != ',' && text[i] != '\0') {
+        if (buffer_json[i] != '{' && buffer_json[i] != '[') {
+            while (buffer_json[i] != ',' && buffer_json[i] != '\0') {
                 i++;
             }
 
-            if (text[i] == ',') {
+            if (buffer_json[i] == ',') {
                 i--;
 
                 /* exclude spaces before comma*/
-                while (text[i] == ' ') {
+                while (buffer_json[i] == ' ') {
                     i--;
                 }
 
                 val_index_end = i;
             } else { return NULL; }
-        } else if (text[i] == '{') {
+        } else if (buffer_json[i] == '{') {
             i++;
 
             /* exclude garbage before the value */
-            while (text[i] == ' ' || text[i] == '\n') {
+            while (buffer_json[i] == ' ' || buffer_json[i] == '\n') {
                 i++;
             }
             val_index_start = i;
 
 
-            while (text[i] != '}') {
+            while (buffer_json[i] != '}') {
                 i++;
             }
-            if (text[i] != '}' && text[i] != '\0') { return NULL; }
+            if (buffer_json[i] != '}' && buffer_json[i] != '\0') { return NULL; }
 
 
             /* exclude grabge after the value */
             i--;
-            while (text[i] == ' ') {
+            while (buffer_json[i] == ' ') {
                 i--;
             }
 
 
             val_index_end = i;
-        } else if (text[i] == '[') {
+        } else if (buffer_json[i] == '[') {
             i++;
 
             /* exclude garbage before the value */
-            while (text[i] == ' ' || text[i] == '\n') {
+            while (buffer_json[i] == ' ' || buffer_json[i] == '\n') {
                 i++;
             }
             val_index_start = i;
 
             
-            while (text[i] != ']') {
+            while (buffer_json[i] != ']') {
                 i++;
             }
-            if (text[i] != ']' && text[i] != '\0') { return NULL; }
+            if (buffer_json[i] != ']' && buffer_json[i] != '\0') { return NULL; }
 
 
             /* exclude grabge after the value */
             i--;
-            while (text[i] == ' ') {
+            while (buffer_json[i] == ' ') {
                 i--;
             }
 
@@ -137,7 +137,7 @@ char *JP_get_value(char text[], char key[]) {
         value = (char*)malloc(value_size);
         if (value == NULL) { perror("Allocation failed"); exit(1); }
 
-        strncpy(value, text+val_index_start, value_size-1);
+        strncpy(value, buffer_json+val_index_start, value_size-1);
         value[value_size-1] = '\0';   
 
         return value;
