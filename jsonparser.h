@@ -14,14 +14,14 @@
 #include <stdbool.h>
 
 /* Searches a string. If string is found returns the index, otherwise returns -1 */
-int JP_find_str(char text[], char string[]) {
+int JP_find_str(char text[], char key[]) {
     bool is_str_found = false;
     int first_index;
     size_t i_text = 0;
     size_t i_str = 0;
 
-    while (text[i_text] != '\0' && string[i_str] != '\0') {
-        if (text[i_text] == string[i_str]) {
+    while (text[i_text] != '\0' && key[i_str] != '\0') {
+        if (text[i_text] == key[i_str]) {
             if (i_str == 0) {
                 first_index = i_text;
             }
@@ -33,7 +33,7 @@ int JP_find_str(char text[], char string[]) {
 
         i_text++;
 
-        if ((i_str + 1) == strlen(string)) {
+        if ((i_str + 1) == strlen(key)) {
             is_str_found = true;
         }
     }
@@ -43,8 +43,8 @@ int JP_find_str(char text[], char string[]) {
     } else { return -1; }
 }
 
-char *JP_get_value(char text[], char string[]) {
-    int index_key = JP_find_str(text, string);
+char *JP_get_value(char text[], char key[]) {
+    int index_key = JP_find_str(text, key);
     int val_index_start;
     int val_index_end;
     int value_size;
