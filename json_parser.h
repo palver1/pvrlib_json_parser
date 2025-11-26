@@ -14,7 +14,7 @@
 #include <stdbool.h>
 
 /* Searches a string. If string is found returns the index, otherwise returns -1 */
-int JP_find_str(char buffer_json[], char key[]) {
+inline int JP_find_str(char buffer_json[], char key[]) {
     bool is_str_found = false;
     int first_index;
     size_t i_buffer = 0;
@@ -141,7 +141,7 @@ char *JP_get_value(char buffer_json[], char key[]) {
         value[value_size-1] = '\0';   
 
         return value;
-    }
+    } else { return NULL; }
 }
 
 #endif
