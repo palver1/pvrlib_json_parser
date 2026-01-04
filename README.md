@@ -1,11 +1,11 @@
 # JSON Parser
 ## Documentation
 ```c
-int JP_find_str(char buffer_json[], char key[]);
+int PVR_json_find_key(char buffer_json[], char key[]);
 ```
-Mostly for inner purpose, but decided to not do it 'static' for now, just in case.  
+Mostly for inner usage. Searches for a key. Returns index or -1.
 
 ```c
-char *JP_get_value(char buffer_json[], char key[]);
+char *PVR_json_get_value(char buffer_json[], char key[]);
 ```
-Main function for getting value by key.
+Returns a value by a key.
